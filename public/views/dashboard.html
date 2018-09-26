@@ -41,7 +41,7 @@
 					<tbody>
 						<tr>
 							<td>URL</td>
-							<td>{{urlInfo.data[0].url}}</td>
+							<td>{{urlInfo.url}}</td>
 						</tr>
 						<tr>
 							<td>Page Source</td>
@@ -49,14 +49,14 @@
 						</tr>
 						<tr>
 							<td>IP Adress</td>
-							<td>{{urlInfo.data[0].ipAddress}}</td>
+							<td>{{urlInfo.ipAddress}}</td>
 						</tr>
 						<tr>
 							<td>Destination URL(if redirected)</td>
-							<td>{{urlInfo.data[0].redirectedUrl}}</td>
+							<td>{{urlInfo.redirectedUrl}}</td>
 						</tr>
 							<td>Requests Made By URL</td>
-							<td>{{urlInfo.data[0].redirectChainLength}}</td>
+							<td>{{urlInfo.redirectChainLength}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -64,12 +64,11 @@
 					<div id="url-list" class="row">
 						<h4>Applications by Wapplzer</h4>
 						<div class="col-sm-4 col-sm-offset-4">
-							
-							<div class="checkbox" ng-repeat="app in urlInfo.data[0].applications">
-								<label>
-									{{ app }}
-								</label>
-							</div>
+							<ul>
+								<div class="list" ng-repeat="app in urlInfo.applications">
+									  <li><label>{{ app }}</label></li>
+								</div>
+							</ul>
 
 							<p class="text-center" ng-show="loading">
 								<span class="fa fa-spinner fa-spin fa-3x"></span>
@@ -79,7 +78,7 @@
 					</div>
       		</div>
       		<div fxflex="49" fxflex.lt-md="100" fxlayout="column" style="padding-left: 25px; padding-top: 25px; flex: 1 1 49%; box-sizing: border-box; flex-direction: column; display: flex; max-width: 49%;">
-      			<img alt="screenshot" height="500" width="500" class="insights-card-img" onerror="this.src='https://storage.googleapis.com/rm-web-assets/misc/no.png';" style="" ng-src="{{imgsrc}}">
+      			<img alt="screenshot" height="500" width="500" class="insights-card-img" style="" ng-src="{{imgsrc}}">
       		</div>
     	</div>
 

@@ -5,6 +5,7 @@ var ObjectId = require('mongodb').ObjectID;
 const fs = require('fs');
 const webdriver = require('selenium-webdriver');
 const chromedriver = require('chromedriver');
+const path = require('path');
 
 const chromeCapabilities = webdriver.Capabilities.chrome();
 chromeCapabilities.set('chromeOptions', {args: ['--headless']});
@@ -16,8 +17,8 @@ const driver = new webdriver.Builder()
 
 const options = {
   debug: false,
-  delay: 500,
-  maxDepth: 3,
+  delay: 0,
+  maxDepth: 2,
   maxUrls: 10,
   maxWait: 5000,
   recursive: true,
@@ -26,7 +27,7 @@ const options = {
   htmlMaxRows: 2000,
 };
 
-function runAnalyzer(url, doc_id) {
+function runAnalyzer(url, callback) {
     const wappalyzer = new Wappalyzer('https://'+ url, options);
     wappalyzer.analyze()
       .then(json => {
@@ -34,11 +35,12 @@ function runAnalyzer(url, doc_id) {
         for (var app in json.applications) {
             result.push(json.applications[app].name);
         }
-        URLDATA.update({"_id" : doc_id},{$set : {"applications" : result}})
         console.log(result);
+        return callback(result)
       })
       .catch(error => {
         console.log(error);
+        return callback(error)
     });
   };
 
@@ -52,7 +54,7 @@ function getURLInfo(doc_id, res) {
     });
 };
 
-async function getScreenshot(domain, filename) {
+async function getScreenshot(domain, filename, callback) {
     let screenshot;
     const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'], ignoreHTTPSErrors: true });
     const page = await browser.newPage();
@@ -72,12 +74,14 @@ async function getScreenshot(domain, filename) {
     await page.close();
     await browser.close();
     }
+    return callback("Success");
 }
 
-async function run(url, callback) {
+async function run(url, wap, callback) {
     let browser = await puppeteer.launch({ headless: true });
-    let page = await browser.newPage();
-    const response = await page.goto('https://' + url + '/');
+    let page = await browser.newPage({ignoreHTTPSErrors: true});
+    //page.setIgnoreHTTPSErrors(true);
+    const response = await page.goto('http://' + url + '/');
 
 
   //  const response = await page.goto('https://' + url + '/');  
@@ -89,6 +93,8 @@ async function run(url, callback) {
         const frame = request.frame();
         if (frame.url() !== urls[urls.length - 1] && frame.url() !== "about:blank") {
         urls.push(frame.url());
+        console.log("Print URLs : ");
+        console.log(urls);
         }
       });
     } catch (err) {
@@ -101,6 +107,7 @@ async function run(url, callback) {
 
     // get last redirected url
     var lastUrl;
+    
     if(urls.length > 0)
         lastUrl = urls[urls.length - 1]; 
     else
@@ -116,7 +123,7 @@ async function run(url, callback) {
             redirectedUrl : lastUrl,
             redirectChainLength: redirectChainLen,
             ipAddress: ipObj.ip,
-            applications: null
+            applications: wap
         }, function (err, urlinfo) {
             if (err){
                 console.log("This is error case");
@@ -135,6 +142,7 @@ module.exports = function (app) {
     // To get url info
     app.get('/api/url/:url_id', function (req, res) {
         // use mongoose to get urlinfo in the database
+        console.log("URL ID INFO GET : ", req.params.url_id)
         getURLInfo(req.params.url_id, res);
     });
 
@@ -142,11 +150,21 @@ module.exports = function (app) {
     app.post('/api/url', function (req, res) {
 
         // Navigate to google.com, enter a search.
-        run(req.body.text, function(response){
+        runAnalyzer(req.body.text, function(wap){
+        run(req.body.text, wap, function(response){
             var doc_id = response;
-            runAnalyzer(req.body.text, doc_id);
-            getScreenshot(req.body.text, doc_id);
-            getURLInfo(doc_id, res);
+            getScreenshot(req.body.text, doc_id, function(img){
+                getURLInfo(doc_id, res);
+                console.log("image created : ", img);
+            });
+            
+                // URLDATA.update({_id : doc_id}, {applications : wap}, function(err, doc){
+                //     if(err)
+                //         console.log(err)
+                //     else
+                //         console.log(doc)
+                // });
+            });
         });
     });
 
@@ -164,6 +182,6 @@ module.exports = function (app) {
 
     // application -------------------------------------------------------------
     app.get('*', function (req, res) {
-        res.sendFile(__dirname + '/public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+        res.sendFile(path.join(__dirname, '../public/', 'index.html')); // load the single view file (angular will handle the page changes on the front-end)
     });
 };

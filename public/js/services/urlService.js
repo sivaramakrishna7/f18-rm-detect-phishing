@@ -13,7 +13,7 @@ angular.module('URLService', [])
 				return null;
 			},
 			get : function(id) {
-				return $http.get('/api/url'+id);
+				return $http.get('/api/url/' + id);
 			},
 			create : function(todoData) {
 				return $http.post('/api/url', todoData);

@@ -3,11 +3,11 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
     $routeProvider
 		//home page
         .when('/', {
-            templateUrl: 'views/home.html',
+            templateUrl: 'public/views/home.html',
             controller: 'HomeController'
         })
         .when('/dashboard', {
-            templateUrl: 'views/dashboard.html',
+            templateUrl: 'public/views/dashboard.html',
             controller: 'DashboardController'
         })
         .otherwise({

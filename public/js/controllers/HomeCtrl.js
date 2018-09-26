@@ -21,7 +21,8 @@ angular.module('HomeCtrl', [])
 					.then(function(data) {
 						$scope.loading = false;
 						$scope.formData = {}; // clear the form so our user is ready to enter another
-						URLFactory.setData(data); // assign our new list of todos
+						localStorage.setItem("_id", data.data[0]._id);
+						//URLFactory.setData(data); // assign our new list of todos
 						$location.path("/dashboard");
 					});
 			}

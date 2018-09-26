@@ -5,17 +5,15 @@ angular.module('DashboardCtrl', [])
 		$scope.formData = {};
 		$scope.loading = true;
 
-		$scope.urlInfo = URLFactory.getData();
-		$scope.imgsrc = 'images/'+$scope.urlInfo.data[0]._id+'.jpg';
-		console.log("Printing data from Dash");
-		console.log($scope.urlInfo);
-		// GET =====================================================================
-		// when landing on the page, get all todos and show them
-		// use the service to get all the todos
-		URLFactory.get($scope.urlInfo.data[0]._id)
+		let id = localStorage._id;
+		URLFactory.get(id)
 			.then(function(data) {
 				$scope.urlInfo = data.data[0];
+				if(($scope.urlInfo.applications).length ==0)
+					$scope.urlInfo.applications = ['No Apps Available'];
 				$scope.loading = false;
+				console.log($scope.urlInfo);
+				$scope.imgsrc = 'public/images/'+$scope.urlInfo._id+'.jpg';
 			});
 
 
@@ -34,6 +32,6 @@ angular.module('DashboardCtrl', [])
 
 		//Redirect to home
 		$scope.goHome = function() {
-			$location.path("/home");
+			$location.path("/");
 		};
 	}]);
