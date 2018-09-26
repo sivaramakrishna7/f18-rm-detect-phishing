@@ -1,0 +1,97 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html>
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+	<title>Scan links in real-time</title>
+
+	<!-- SCROLLS -->
+	<style>
+		html 					{ overflow-y:scroll; }
+		body 					{ padding-top:50px; }
+		#url-list 				{ margin-bottom:30px; }
+		#todo-form 	 			{ margin-bottom:50px; }
+	</style>
+
+	<!-- SPELLS -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script><!-- load angular -->
+
+	<script src="js/services/urlService.js"></script> <!-- load our url service -->
+	<script src="js/core.js"></script> <!-- load our main application -->
+
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron text-center">
+			<h3>URL Dashboard</h3>
+		</div>
+		<div fxflex="" fxlayout="row" fxlayoutwrap="" class="ng-star-inserted" style="flex: 1 1 1e-09px; box-sizing: border-box; flex-flow: row wrap; display: flex;">
+      		<div fxflex="49" fxflex.lt-md="100" fxlayout="column" style="padding-left: 25px; padding-top: 25px; flex: 1 1 49%; box-sizing: border-box; flex-direction: column; display: flex; max-width: 49%;">
+		      	<table st-table="urlInfo" class="table table-striped">
+					<thead>
+						<tr>
+							<th>URL Info</th>
+							<th>Scanner Results</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>URL</td>
+							<td>{{urlInfo.data[0].url}}</td>
+						</tr>
+						<tr>
+							<td>Page Source</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>IP Adress</td>
+							<td>{{urlInfo.data[0].ipAddress}}</td>
+						</tr>
+						<tr>
+							<td>Destination URL(if redirected)</td>
+							<td>{{urlInfo.data[0].redirectedUrl}}</td>
+						</tr>
+							<td>Requests Made By URL</td>
+							<td>{{urlInfo.data[0].redirectChainLength}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- Applications List -->
+					<div id="url-list" class="row">
+						<h4>Applications by Wapplzer</h4>
+						<div class="col-sm-4 col-sm-offset-4">
+							
+							<div class="checkbox" ng-repeat="app in urlInfo.data[0].applications">
+								<label>
+									{{ app }}
+								</label>
+							</div>
+
+							<p class="text-center" ng-show="loading">
+								<span class="fa fa-spinner fa-spin fa-3x"></span>
+							</p>
+
+						</div>
+					</div>
+      		</div>
+      		<div fxflex="49" fxflex.lt-md="100" fxlayout="column" style="padding-left: 25px; padding-top: 25px; flex: 1 1 49%; box-sizing: border-box; flex-direction: column; display: flex; max-width: 49%;">
+      			<img alt="screenshot" height="500" width="500" class="insights-card-img" onerror="this.src='https://storage.googleapis.com/rm-web-assets/misc/no.png';" style="" ng-src="{{imgsrc}}">
+      		</div>
+    	</div>
+
+		<div class="jumbotron text-right">
+			<button type="submit" class="btn btn-primary btn-lg" ng-click="goHome()">Back To Home</button>
+		</div>
+		
+		<div class="text-center text-muted">
+			<p>Designed & Developed by <a href="https://www.linkedin.com/in/sivaramakrishna7/">Siva</a>.</p>
+		</div>
+
+	</div>
+
+</body>
+</html>

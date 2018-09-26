@@ -1,0 +1,22 @@
+{
+  "name": "node-todo",
+  "version": "0.0.1",
+  "description": "Simple todo application.",
+  "main": "server.js",
+  "author": "Scotch",
+  "dependencies": {
+    "angular-smart-table": "^2.1.11",
+    "body-parser": "^1.18.2",
+    "express": "^4.10.8",
+    "method-override": "^2.3.10",
+    "mongoose": "4.10.8",
+    "morgan": "^1.9.0",
+    "puppeteer": "^1.8.0",
+    "sync": "^0.2.5",
+    "wappalyzer": "^5.5.1"
+  },
+  "devDependencies": {
+    "chromedriver": "^2.42.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
+  }
+}
