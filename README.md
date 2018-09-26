@@ -15,7 +15,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Installation
 
-1. Clone the repository: 'git clone https://github.com/sivaramakrishna7/url-web-scanner.git'
+1. Clone the repository: 'git clone https://github.com/sivaramakrishna7/f18-rm-detect-phishing.git'
 2. Install the application: 'npm install'
 3. Place your own MongoDB URI in 'config/database.js'
 3. Start the server: 'node server.js'
