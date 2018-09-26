@@ -157,14 +157,7 @@ module.exports = function (app) {
                 getURLInfo(doc_id, res);
                 console.log("image created : ", img);
             });
-            
-                // URLDATA.update({_id : doc_id}, {applications : wap}, function(err, doc){
-                //     if(err)
-                //         console.log(err)
-                //     else
-                //         console.log(doc)
-                // });
-            });
+          });
         });
     });
 
